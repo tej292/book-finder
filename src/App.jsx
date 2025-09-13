@@ -1,9 +1,10 @@
-// src/App.jsx
+// src/App.jsx - UPDATED
 import React, { useState, useEffect } from 'react';
-import SearchBar from './components/SearchBar.jsx'; // Consistent .jsx import
-import BookList from './components/BookList.jsx';   // Consistent .jsx import
-import LoadingSpinner from './components/LoadingSpinner.jsx'; // Consistent .jsx import
-import './App.css'; // Import global styles
+import SearchBar from './components/SearchBar.jsx';
+import BookList from './components/BookList.jsx';
+import LoadingSpinner from './components/LoadingSpinner.jsx';
+import FeaturedBooks from './components/FeaturedBooks.jsx'; // Import the new component
+import './App.css';
 
 function App() {
     const [books, setBooks] = useState([]);
@@ -11,11 +12,13 @@ function App() {
     const [error, setError] = useState(null);
     const [currentSearch, setCurrentSearch] = useState({ type: '', query: '' });
 
-    const fetchBooks = async (searchType, query) => {
-        setLoading(true);
-        setError(null);
-        setBooks([]); // Clear previous results
+    // State for featured books
+    const [featuredBooks, setFeaturedBooks] = useState([]);
+    const [featuredLoading, setFeaturedLoading] = useState(true);
+    const [featuredError, setFeaturedError] = useState(null);
 
+    // Function to fetch books (reused for both search and featured)
+    const genericFetchBooks = async (searchType, query) => {
         const searchParamMap = {
             'title': 'title',
             'author': 'author',
@@ -26,38 +29,88 @@ function App() {
         };
 
         if (!searchParamMap[searchType]) {
-            setError("Invalid search type selected.");
-            setLoading(false);
-            return;
+            throw new Error("Invalid search type provided for fetch.");
         }
 
         const url = `https://openlibrary.org/search.json?${searchParamMap[searchType]}=${encodeURIComponent(query)}`;
 
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            // Filter out books that don't have a title, as they are not very useful
-            setBooks(data.docs.filter(book => book.title));
-        } catch (err) {
-            setError(`Failed to fetch books: ${err.message}`);
-        } finally {
-            setLoading(false);
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+        const data = await response.json();
+        return data.docs.filter(book => book.title); // Filter out books without titles
     };
 
-    // Effect to trigger search when currentSearch changes
+
+    // --- Effect for regular search ---
     useEffect(() => {
         if (currentSearch.type && currentSearch.query) {
-            fetchBooks(currentSearch.type, currentSearch.query);
+            const fetchAndSetBooks = async () => {
+                setLoading(true);
+                setError(null);
+                setBooks([]);
+                try {
+                    const fetched = await genericFetchBooks(currentSearch.type, currentSearch.query);
+                    setBooks(fetched);
+                } catch (err) {
+                    setError(`Failed to fetch books: ${err.message}`);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchAndSetBooks();
         }
     }, [currentSearch]);
 
+
+    // --- Effect for fetching featured books on initial load ---
+    useEffect(() => {
+        const fetchFeatured = async () => {
+            setFeaturedLoading(true);
+            setFeaturedError(null);
+            try {
+                // Example featured books: 'Dune', 'Pride and Prejudice', 'The Hitchhiker's Guide to the Galaxy'
+                // You can customize this array of queries.
+                const featuredQueries = [
+                    { type: 'title', query: 'Dune' },
+                    { type: 'title', query: 'Pride and Prejudice' },
+                    { type: 'title', query: 'The Hitchhiker\'s Guide to the Galaxy' },
+                    { type: 'title', query: 'The Great Gatsby' }
+                ];
+
+                const allFeaturedResults = await Promise.all(
+                    featuredQueries.map(q => genericFetchBooks(q.type, q.query))
+                );
+
+                // Take the first useful result from each query for simplicity
+                const compiledFeatured = allFeaturedResults
+                    .map(results => results.length > 0 ? results[0] : null)
+                    .filter(Boolean); // Remove any nulls
+
+                setFeaturedBooks(compiledFeatured);
+
+            } catch (err) {
+                setFeaturedError(`Failed to load featured books: ${err.message}`);
+            } finally {
+                setFeaturedLoading(false);
+            }
+        };
+
+        fetchFeatured();
+    }, []); // Empty dependency array means this runs once on mount
+
+
     const handleSearch = (type, query) => {
-        setCurrentSearch({ type, query });
+        // Only set search if there's an actual query to prevent
+        // triggering a blank search when component mounts.
+        if (query.trim()) {
+            setCurrentSearch({ type, query });
+        }
     };
+
+    // Determine whether to show search results or featured books
+    const showSearchResults = currentSearch.type && currentSearch.query;
 
     return (
         <div className="App">
@@ -66,9 +119,16 @@ function App() {
             </header>
             <SearchBar onSearch={handleSearch} />
             <main className="App-main">
-                {loading && <LoadingSpinner />}
-                {error && <p className="error-message">{error}</p>}
-                {!loading && !error && <BookList books={books} />}
+                {/* Conditionally render search results or featured section */}
+                {showSearchResults ? (
+                    <>
+                        {loading && <LoadingSpinner />}
+                        {error && <p className="error-message">{error}</p>}
+                        {!loading && !error && <BookList books={books} />}
+                    </>
+                ) : (
+                    <FeaturedBooks books={featuredBooks} loading={featuredLoading} error={featuredError} />
+                )}
             </main>
         </div>
     );

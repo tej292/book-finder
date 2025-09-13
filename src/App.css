@@ -1,75 +1,116 @@
 /* src/App.css */
 
-/* --- Base Styles & Typography --- */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
+/* --- Base Styles, Typography & Modern Color Palette --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@500;700&display=swap');
 
 :root {
-    --primary-color: #6a89cc; /* A soft blue */
-    --primary-gradient: linear-gradient(135deg, #89a9e3, #6a89cc);
-    --secondary-color: #a0d2eb; /* A lighter blue */
-    --accent-color: #ff9a8d; /* A soft coral for highlights */
-    --text-dark: #333;
-    --text-light: #f4f7f6;
-    --background-light: #f4f7f6;
-    --card-background: #ffffff;
-    --shadow-light: rgba(0, 0, 0, 0.08);
-    --shadow-hover: rgba(0, 0, 0, 0.15);
-    --border-radius-sm: 8px;
-    --border-radius-md: 12px;
-    --border-radius-lg: 16px;
-    --transition-speed: 0.3s ease-in-out;
+    /* Updated Pastel & Gradient Palette */
+    --primary-color: #7f5a83; /* Deep Lavender */
+    --primary-gradient: linear-gradient(135deg, #7f5a83 0%, #0d324d 100%); /* Lavender to Dark Blue */
+    --secondary-color: #c9b6e4; /* Lighter Lavender */
+    --accent-color: #ffbe86; /* Soft Peach */
+    --highlight-color: #a4e4ff; /* Pale Aqua for subtle glows */
+    --background-soft: #e0e5ec; /* Light gray for neumorphic base */
+    --text-dark: #3a4750; /* Dark Charcoal */
+    --text-medium: #5c6773;
+    --text-light: #fefefe;
+
+    /* Neumorphism Shadows */
+    --neumo-shadow-light: 6px 6px 12px rgba(163,177,198,0.6), -6px -6px 12px rgba(255,255,255,0.8);
+    --neumo-shadow-inset: inset 2px 2px 5px rgba(163,177,198,0.6), inset -2px -2px 5px rgba(255,255,255,0.8);
+    --neumo-shadow-hover: 8px 8px 16px rgba(163,177,198,0.7), -8px -8px 16px rgba(255,255,255,0.9);
+
+    /* Glassmorphism Effect */
+    --glass-background: rgba(255, 255, 255, 0.15); /* Slightly transparent white */
+    --glass-backdrop: blur(10px);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+
+    --border-radius-sm: 10px;
+    --border-radius-md: 15px;
+    --border-radius-lg: 20px;
+
+    --transition-speed: 0.4s ease-in-out;
 }
 
 body {
-    font-family: 'Open Sans', sans-serif; /* Readable body text */
+    font-family: 'Poppins', sans-serif; /* Modern, clean font */
     margin: 0;
     padding: 0;
-    background-color: var(--background-light);
+    background: var(--background-soft); /* Neumorphic background */
     color: var(--text-dark);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    display: flex; /* For centering the app if it's not full width */
+    justify-content: center;
+    align-items: flex-start; /* Align to top */
+}
+
+/* Global Reset/Enhancements */
+*, *::before, *::after {
+    box-sizing: border-box;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Montserrat', sans-serif; /* Bold and clear headings */
-    font-weight: 700; /* Extra bold for headings */
+    font-family: 'Montserrat', sans-serif; /* Stronger headings */
+    font-weight: 700;
     color: var(--text-dark);
-    margin-bottom: 0.5em;
+    margin-bottom: 0.7em; /* Increased spacing */
 }
 
-h1 { font-size: 2.8em; }
-h3 { font-size: 1.6em; }
-p { font-size: 1em; margin-bottom: 0.8em; }
+h1 { font-size: 3.5em; font-weight: 700;} /* More impactful H1 */
+h2 { font-size: 2.5em; font-weight: 600;}
+h3 { font-size: 1.8em; font-weight: 500;}
+p { font-size: 1em; margin-bottom: 0.9em; color: var(--text-medium); }
 
 /* --- App Layout --- */
 .App {
-    max-width: 1400px; /* Increased max-width for more spacious feel */
-    margin: 0 auto;
-    padding: 20px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 40px auto; /* More vertical margin */
+    padding: 30px; /* Increased padding */
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    gap: 40px; /* Spacing between main sections */
+    background: var(--background-soft);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--neumo-shadow-light); /* Main app container shadow */
 }
 
 .App-header {
-    background: var(--primary-gradient); /* Soft gradient background */
-    padding: 30px 20px;
+    background: var(--primary-gradient);
+    padding: 40px 30px;
     color: var(--text-light);
     text-align: center;
-    border-radius: var(--border-radius-lg); /* Rounded corners for header */
-    margin-bottom: 40px;
-    box-shadow: 0 8px 20px var(--shadow-hover); /* Subtle shadow */
-    animation: fadeIn 1s ease-out; /* Fade-in animation */
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* Stronger shadow for depth */
+    animation: fadeInScale 1.2s ease-out forwards; /* More dynamic animation */
+    overflow: hidden; /* Ensures gradient doesn't bleed */
+    position: relative;
+    z-index: 1; /* Ensure text is above any pseudo-elements */
 }
+
+.App-header::before { /* Subtle pattern/texture for header */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zm1 5v1H5zM0 0h1L0 1z'/%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.2;
+    z-index: -1;
+}
+
 
 .App-header h1 {
     margin: 0;
-    font-size: 3.2em;
-    color: var(--text-light); /* White text for header */
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    font-size: 4em; /* Even larger, more impactful title */
+    color: var(--text-light);
+    letter-spacing: 2px;
+    text-shadow: 0 4px 8px rgba(0,0,0,0.4); /* Stronger text shadow */
+    font-weight: 700;
 }
 
 /* --- SearchBar Styles --- */
@@ -77,113 +118,138 @@ p { font-size: 1em; margin-bottom: 0.8em; }
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 50px; /* More spacing */
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 20px; /* More spacing */
+    flex-wrap: wrap;
+    padding: 25px; /* Padding within the search bar container */
+    background: var(--background-soft);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--neumo-shadow-inset); /* Inset shadow for container */
+    animation: fadeIn 0.8s ease-out 0.5s forwards;
+    opacity: 0;
 }
 
 .search-bar-select,
 .search-bar-input,
 .search-bar-button {
-    padding: 14px 20px; /* Increased padding */
-    font-size: 1.05em;
-    border: 1px solid #dcdcdc;
-    border-radius: var(--border-radius-md); /* Rounded corners */
-    transition: all var(--transition-speed); /* Smooth transitions for all states */
-    outline: none; /* Remove default outline */
+    padding: 16px 25px; /* More generous padding */
+    font-size: 1.1em;
+    border: none; /* No visible border for neumorphism */
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-speed);
+    outline: none;
+    background-color: var(--background-soft);
+    box-shadow: var(--neumo-shadow-light); /* Outset shadow for elements */
+    color: var(--text-dark);
 }
 
 .search-bar-select {
-    background-color: var(--card-background);
     cursor: pointer;
-    appearance: none; /* Remove default select arrow */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236a89cc'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); /* Custom arrow */
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%237f5a83'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 24px;
-    min-width: 150px; /* Ensures consistent width */
+    background-position: right 15px center;
+    background-size: 20px;
+    min-width: 180px;
 }
 
-.search-bar-select:hover {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(106, 137, 204, 0.2); /* Subtle glow */
-}
-
-.search-bar-input {
-    flex-grow: 1;
-    max-width: 450px;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* Inner shadow for depth */
+.search-bar-select:hover,
+.search-bar-input:hover {
+    box-shadow: var(--neumo-shadow-hover);
 }
 
 .search-bar-input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(106, 137, 204, 0.2); /* Subtle glow on focus */
+    box-shadow: var(--neumo-shadow-inset); /* Inset on focus for "pressed" look */
 }
 
 .search-bar-button {
-    background: var(--primary-color);
+    background: var(--primary-gradient); /* Gradient button */
     color: var(--text-light);
-    border: none;
-    cursor: pointer;
     font-weight: 600;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2); /* Stronger initial shadow */
+    cursor: pointer;
 }
 
 .search-bar-button:hover {
-    background: darken(var(--primary-color), 10%); /* Subtle darkening on hover */
-    transform: translateY(-2px); /* Lift effect */
-    box-shadow: 0 6px 15px var(--shadow-hover);
+    transform: translateY(-3px) scale(1.02); /* More pronounced lift and scale */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3); /* Stronger hover shadow */
+    background: linear-gradient(135deg, #7f5a83 0%, #0d324d 100%); /* Maintain gradient, but could darken if you use SASS */
 }
 
 .search-bar-button:active {
-    transform: translateY(0); /* Press effect */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
+    box-shadow: var(--neumo-shadow-inset); /* Inset on click */
 }
 
-/* --- BookList Styles --- */
-.book-list {
+/* --- BookList & FeaturedBookList Styles --- */
+.book-list, .featured-book-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 30px; /* Consistent spacing */
-    padding-bottom: 40px; /* Padding for the bottom of the list */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Larger cards */
+    gap: 35px; /* Increased spacing */
+    padding-bottom: 40px;
 }
 
 /* --- BookCard Styles --- */
 .book-card {
-    background-color: var(--card-background);
-    border-radius: var(--border-radius-lg); /* Larger rounded corners */
-    box-shadow: 0 6px 16px var(--shadow-light); /* More prominent but soft shadow */
+    background: var(--glass-background); /* Glassmorphism background */
+    backdrop-filter: var(--glass-backdrop);
+    -webkit-backdrop-filter: var(--glass-backdrop);
+    border: var(--glass-border);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); /* Soft, prominent shadow */
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: transform var(--transition-speed), box-shadow var(--transition-speed); /* Smooth transitions */
-    animation: fadeIn 0.8s ease-out forwards; /* Fade in animation for cards */
-    opacity: 0; /* Start invisible for fade-in */
-    transform: translateY(20px); /* Start slightly below for fade-in */
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    animation: fadeIn 0.8s ease-out forwards;
+    opacity: 0;
+    transform: translateY(30px); /* More pronounced fade-in */
     flex: 1; /* Ensures cards fill available space */
+    position: relative; /* For the subtle glow */
 }
 
-/* Delay for cascade effect */
+/* Delay for cascade effect - adjusted for new animation structure */
 .book-list .book-card:nth-child(1) { animation-delay: 0.1s; }
 .book-list .book-card:nth-child(2) { animation-delay: 0.2s; }
 .book-list .book-card:nth-child(3) { animation-delay: 0.3s; }
 .book-list .book-card:nth-child(4) { animation-delay: 0.4s; }
-/* ... continue for more if needed, or use JS for dynamic delay */
 
+
+.book-card::before { /* Subtle border glow on hover */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: var(--border-radius-lg);
+    padding: 2px; /* Thickness of the glow */
+    background: linear-gradient(45deg, var(--highlight-color), transparent 50%, var(--highlight-color));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity var(--transition-speed);
+    z-index: 0;
+}
+
+.book-card:hover::before {
+    opacity: 0.8;
+}
 
 .book-card:hover {
-    transform: translateY(-5px) scale(1.02); /* Subtle lift and scale */
-    box-shadow: 0 10px 25px var(--shadow-hover); /* Enhanced shadow on hover */
+    transform: translateY(-8px) scale(1.03); /* Enhanced lift and scale */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25); /* Stronger hover shadow */
 }
 
 .book-card-cover {
     width: 100%;
-    height: 280px; /* Slightly taller cover for better display */
+    height: 320px; /* Taller cover for better visuals */
     object-fit: contain;
-    background-color: #e0e6ec; /* Light gray-blue placeholder */
-    padding: 15px; /* More padding */
-    border-bottom: 1px solid #eee;
-    border-top-left-radius: var(--border-radius-lg); /* Rounded top corners */
+    background-color: rgba(255, 255, 255, 0.1); /* Lighter, subtle background for glassmorphism */
+    padding: 20px; /* More padding */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-top-left-radius: var(--border-radius-lg);
     border-top-right-radius: var(--border-radius-lg);
     display: flex;
     justify-content: center;
@@ -192,48 +258,52 @@ p { font-size: 1em; margin-bottom: 0.8em; }
 
 .book-card-cover[src*="No+Cover"] {
     font-family: 'Montserrat', sans-serif;
-    color: #888;
-    font-size: 1.2em;
-    font-weight: 600;
+    color: var(--text-medium);
+    font-size: 1.4em;
+    font-weight: 500;
+    background-color: rgba(255, 255, 255, 0.05); /* Even more subtle for missing cover */
 }
 
-
 .book-card-details {
-    padding: 20px; /* More padding */
+    padding: 25px; /* More padding */
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Pushes publisher to bottom */
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.05); /* Subtle background for text area */
 }
 
 .book-card-title {
-    font-size: 1.5em;
-    margin-bottom: 8px;
+    font-size: 1.6em;
+    margin-bottom: 10px;
     color: var(--primary-color);
     line-height: 1.3;
+    font-weight: 600; /* More prominent title */
 }
 
 .book-card-author,
 .book-card-info {
-    font-size: 0.9em;
-    color: #666;
-    margin-bottom: 5px;
+    font-size: 0.95em;
+    color: var(--text-medium);
+    margin-bottom: 8px; /* More spacing */
 }
 
 .no-results, .error-message {
     text-align: center;
-    font-size: 1.4em;
-    color: #777;
+    font-size: 1.5em;
+    color: var(--text-medium);
     margin-top: 80px;
-    padding: 20px;
-    background-color: var(--card-background);
+    padding: 30px;
+    background: var(--background-soft);
     border-radius: var(--border-radius-lg);
-    box-shadow: 0 4px 10px var(--shadow-light);
+    box-shadow: var(--neumo-shadow-light);
+    animation: fadeIn 0.8s ease-out forwards;
+    opacity: 0;
 }
 
 .error-message {
-    color: #d9534f; /* A more distinct error color */
-    font-weight: 600;
+    color: #e74c3c; /* Stronger error color */
+    font-weight: 700;
 }
 
 /* --- Loading Spinner Styles --- */
@@ -242,22 +312,125 @@ p { font-size: 1em; margin-bottom: 0.8em; }
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 80px;
-    gap: 15px;
+    margin-top: 100px;
+    gap: 20px;
     color: var(--primary-color);
-    font-size: 1.2em;
+    font-size: 1.3em;
     font-weight: 600;
+    animation: fadeIn 0.8s ease-out forwards;
+    opacity: 0;
 }
 
 .loading-spinner {
-    border: 8px solid rgba(106, 137, 204, 0.2); /* Lighter border */
-    border-top: 8px solid var(--primary-color); /* Primary color spinner */
+    border: 8px solid rgba(127, 90, 131, 0.2);
+    border-top: 8px solid var(--primary-color);
     border-radius: 50%;
-    width: 70px; /* Larger spinner */
-    height: 70px;
+    width: 80px; /* Even larger spinner */
+    height: 80px;
     animation: spin 1s linear infinite;
 }
 
+/* --- Featured Section --- */
+.featured-section {
+    padding: 50px 0;
+    margin-bottom: 50px;
+    text-align: center;
+    background: var(--background-soft);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--neumo-shadow-light); /* Outset shadow for featured section */
+    animation: fadeIn 1s ease-out 0.8s forwards;
+    opacity: 0;
+}
+
+.section-title {
+    font-size: 2.8em;
+    color: var(--primary-color);
+    margin-bottom: 50px;
+    letter-spacing: 1px;
+    position: relative;
+    padding-bottom: 20px;
+    font-weight: 600;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 100px; /* Wider underline */
+    height: 5px; /* Thicker underline */
+    background: var(--accent-color);
+    border-radius: 3px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.featured-book-list {
+    padding: 0 40px; /* More padding inside the featured section */
+}
+
+/* Adjust BookCard animation delay for featured section */
+.featured-book-list .book-card:nth-child(1) { animation-delay: 0.1s; }
+.featured-book-list .book-card:nth-child(2) { animation-delay: 0.2s; }
+.featured-book-list .book-card:nth-child(3) { animation-delay: 0.3s; }
+.featured-book-list .book-card:nth-child(4) { animation-delay: 0.4s; }
+
+
+/* --- API Links/Buttons --- */
+.book-card-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 10px; /* Spacing between buttons */
+    padding-top: 15px; /* Separator from book info */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator, adjusted for glassmorphism */
+}
+
+.action-button {
+    display: block; /* Make anchors behave like block buttons */
+    padding: 10px 15px;
+    border-radius: var(--border-radius-sm);
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+    text-align: center;
+    transition: all var(--transition-speed);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Specific button styles for branding */
+.action-button.google-books {
+    background-color: #4285F4; /* Google Blue */
+    color: white;
+}
+.action-button.google-books:hover {
+    background-color: #357ae8;
+}
+
+.action-button.amazon {
+    background-color: #FF9900; /* Amazon Orange */
+    color: white;
+}
+.action-button.amazon:hover {
+    background-color: #e68a00;
+}
+
+.action-button.open-library {
+    background-color: var(--secondary-color); /* Lighter Lavender from palette */
+    color: var(--text-dark);
+}
+.action-button.open-library:hover {
+    /* Using a simpler darken here as you don't have a direct SASS-like darken function in plain CSS */
+    background-color: #b0a1d0; /* Manually darkened secondary-color */
+    color: var(--text-dark); /* Keep text dark */
+}
+
+/* --- Animations --- */
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -266,7 +439,7 @@ p { font-size: 1em; margin-bottom: 0.8em; }
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
@@ -274,70 +447,100 @@ p { font-size: 1em; margin-bottom: 0.8em; }
     }
 }
 
-
-/* --- Responsive Adjustments --- */
-@media (max-width: 1024px) {
-    .App {
-        padding: 15px;
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-20px);
     }
-    .App-header h1 {
-        font-size: 2.5em;
-    }
-    .book-list {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 25px;
-    }
-    .book-card-cover {
-        height: 240px;
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
     }
 }
 
-@media (max-width: 768px) {
-    .App-header h1 {
-        font-size: 2em;
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1200px) {
+    .App {
+        max-width: 1000px;
+        padding: 25px;
     }
+    h1 { font-size: 3em; }
+    h2 { font-size: 2.2em; }
+    .book-list, .featured-book-list {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+    }
+}
+
+@media (max-width: 900px) {
+    .App {
+        padding: 20px;
+        margin: 20px auto;
+    }
+    h1 { font-size: 2.5em; }
+    h2 { font-size: 2em; }
+    .App-header { padding: 30px 20px; }
     .search-bar {
-        flex-direction: column; /* Stack search elements vertically */
+        padding: 20px;
+        gap: 15px;
+    }
+    .search-bar-select, .search-bar-input, .search-bar-button {
+        padding: 14px 20px;
+        font-size: 1em;
+    }
+    .book-card-cover { height: 280px; padding: 15px; }
+    .book-card-details { padding: 20px; }
+    .section-title { font-size: 2.2em; margin-bottom: 40px; }
+    .featured-book-list { padding: 0 20px; }
+}
+
+@media (max-width: 768px) {
+    .App {
+        gap: 30px;
+    }
+    h1 { font-size: 2em; letter-spacing: 1px; }
+    h2 { font-size: 1.8em; }
+    .App-header { margin-bottom: 30px; }
+    .search-bar {
+        flex-direction: column;
         align-items: stretch;
         gap: 12px;
     }
-    .search-bar-select,
-    .search-bar-input,
-    .search-bar-button {
-        width: 100%; /* Full width for inputs and buttons */
-        max-width: unset; /* Remove max-width constraint */
-        box-sizing: border-box; /* Include padding in width calculation */
+    .search-bar-select, .search-bar-input, .search-bar-button {
+        width: 100%;
+        max-width: unset;
+        box-sizing: border-box;
     }
-    .book-list {
-        grid-template-columns: 1fr; /* Single column for mobile */
-        gap: 20px;
+    .book-list, .featured-book-list {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        padding: 0 15px;
     }
-    .book-card-cover {
-        height: 200px;
-    }
-    .book-card-title {
-        font-size: 1.3em;
-    }
+    .book-card-cover { height: 250px; }
+    .book-card-title { font-size: 1.4em; }
+    .section-title { font-size: 2em; margin-bottom: 30px; }
+    .loading-spinner-container, .no-results, .error-message { margin-top: 60px; }
 }
 
 @media (max-width: 480px) {
     .App {
-        padding: 10px;
-    }
-    .App-header {
-        padding: 20px 10px;
-        margin-bottom: 25px;
-    }
-    .App-header h1 {
-        font-size: 1.8em;
-    }
-    .search-bar-select,
-    .search-bar-input,
-    .search-bar-button {
-        padding: 12px 15px;
-        font-size: 0.95em;
-    }
-    .book-card-details {
         padding: 15px;
+        margin: 15px auto;
     }
+    h1 { font-size: 1.7em; }
+    h2 { font-size: 1.5em; }
+    h3 { font-size: 1.4em; }
+    p { font-size: 0.95em; }
+    .App-header { padding: 25px 15px; margin-bottom: 20px; }
+    .search-bar { padding: 15px; }
+    .search-bar-select, .search-bar-input, .search-bar-button {
+        padding: 12px 15px;
+        font-size: 0.9em;
+    }
+    .book-card-cover { height: 200px; padding: 10px; }
+    .book-card-details { padding: 15px; }
+    .section-title { font-size: 1.7em; margin-bottom: 25px; padding-bottom: 12px; }
+    .section-title::after { width: 70px; height: 4px; }
+    .featured-book-list { padding: 0 10px; }
 }
