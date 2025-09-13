@@ -544,3 +544,42 @@ p { font-size: 1em; margin-bottom: 0.9em; color: var(--text-medium); }
     .section-title::after { width: 70px; height: 4px; }
     .featured-book-list { padding: 0 10px; }
 }
+/* src/App.css - CRITICAL FIX FOR CLICKABILITY */
+
+/* ... (Keep all your existing :root, body, h1, h2, p, etc. styles) ... */
+
+.book-card {
+    /* ... (Keep existing book-card styles) ... */
+    position: relative; /* Already there, but essential for z-index */
+    z-index: 1; /* Give the card a base z-index */
+}
+
+/* New: Ensure the main content is on top */
+.book-card-content {
+    position: relative; /* Important for z-index context */
+    z-index: 2; /* Make content appear above any background/pseudo-elements */
+    display: flex; /* Maintain flex layout for cover and details */
+    flex-direction: column;
+    height: 100%; /* Ensure it fills the card */
+}
+
+.book-card::before { /* Subtle border glow on hover */
+    /* ... (Keep existing ::before styles) ... */
+    z-index: -1; /* CRITICAL: Push the glow effect BEHIND the actual content */
+}
+
+/* Ensure the details section also has a z-index if needed, though book-card-content should handle it */
+.book-card-details {
+    /* ... (Keep existing book-card-details styles) ... */
+    position: relative; /* Important for z-index context */
+    z-index: 3; /* Ensure details and buttons are definitely clickable */
+}
+
+.book-card-actions {
+    /* ... (Keep existing book-card-actions styles) ... */
+    position: relative; /* Ensure these are also on top if their parent has a z-index */
+    z-index: 4; /* Highest z-index for the clickable buttons */
+}
+
+
+/* ... (Keep all other App.css styles unchanged) ... */
