@@ -1,9 +1,10 @@
-// src/App.jsx - UPDATED
 import React, { useState, useEffect } from 'react';
+import Navbar from './components/Navbar.jsx';
+import Footer from './components/Footer.jsx';
 import SearchBar from './components/SearchBar.jsx';
 import BookList from './components/BookList.jsx';
 import LoadingSpinner from './components/LoadingSpinner.jsx';
-import FeaturedBooks from './components/FeaturedBooks.jsx'; // Import the new component
+import FeaturedBooks from './components/FeaturedBooks.jsx';
 import './App.css';
 
 function App() {
@@ -12,12 +13,10 @@ function App() {
     const [error, setError] = useState(null);
     const [currentSearch, setCurrentSearch] = useState({ type: '', query: '' });
 
-    // State for featured books
     const [featuredBooks, setFeaturedBooks] = useState([]);
     const [featuredLoading, setFeaturedLoading] = useState(true);
     const [featuredError, setFeaturedError] = useState(null);
 
-    // Function to fetch books (reused for both search and featured)
     const genericFetchBooks = async (searchType, query) => {
         const searchParamMap = {
             'title': 'title',
@@ -39,11 +38,9 @@ function App() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        return data.docs.filter(book => book.title); // Filter out books without titles
+        return data.docs.filter(book => book.title);
     };
 
-
-    // --- Effect for regular search ---
     useEffect(() => {
         if (currentSearch.type && currentSearch.query) {
             const fetchAndSetBooks = async () => {
@@ -63,15 +60,11 @@ function App() {
         }
     }, [currentSearch]);
 
-
-    // --- Effect for fetching featured books on initial load ---
     useEffect(() => {
         const fetchFeatured = async () => {
             setFeaturedLoading(true);
             setFeaturedError(null);
             try {
-                // Example featured books: 'Dune', 'Pride and Prejudice', 'The Hitchhiker's Guide to the Galaxy'
-                // You can customize this array of queries.
                 const featuredQueries = [
                     { type: 'title', query: 'Dune' },
                     { type: 'title', query: 'Pride and Prejudice' },
@@ -83,13 +76,11 @@ function App() {
                     featuredQueries.map(q => genericFetchBooks(q.type, q.query))
                 );
 
-                // Take the first useful result from each query for simplicity
                 const compiledFeatured = allFeaturedResults
                     .map(results => results.length > 0 ? results[0] : null)
-                    .filter(Boolean); // Remove any nulls
+                    .filter(Boolean);
 
                 setFeaturedBooks(compiledFeatured);
-
             } catch (err) {
                 setFeaturedError(`Failed to load featured books: ${err.message}`);
             } finally {
@@ -98,28 +89,24 @@ function App() {
         };
 
         fetchFeatured();
-    }, []); // Empty dependency array means this runs once on mount
-
+    }, []);
 
     const handleSearch = (type, query) => {
-        // Only set search if there's an actual query to prevent
-        // triggering a blank search when component mounts.
         if (query.trim()) {
             setCurrentSearch({ type, query });
         }
     };
 
-    // Determine whether to show search results or featured books
     const showSearchResults = currentSearch.type && currentSearch.query;
 
     return (
         <div className="App">
+            <Navbar />
             <header className="App-header">
-                <h1>Alex's Book Finder</h1>
+                <h1>Book Finder</h1>
             </header>
             <SearchBar onSearch={handleSearch} />
             <main className="App-main">
-                {/* Conditionally render search results or featured section */}
                 {showSearchResults ? (
                     <>
                         {loading && <LoadingSpinner />}
@@ -130,6 +117,7 @@ function App() {
                     <FeaturedBooks books={featuredBooks} loading={featuredLoading} error={featuredError} />
                 )}
             </main>
+            <Footer />
         </div>
     );
 }

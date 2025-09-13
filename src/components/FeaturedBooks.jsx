@@ -1,45 +1,77 @@
 // src/components/FeaturedBooks.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import BookCard from './BookCard.jsx';
-import LoadingSpinner from './LoadingSpinner.jsx'; // Use existing spinner
-import '../App.css'; // For shared styles
+import LoadingSpinner from './LoadingSpinner.jsx';
 
-function FeaturedBooks({ books, loading, error }) {
-    if (loading) {
-        return (
-            <div className="featured-section">
-                <h2 className="section-title">Featured Books</h2>
-                <LoadingSpinner />
-            </div>
-        );
-    }
+function FeaturedBooks() {
+    const [featuredBooks, setFeaturedBooks] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState('fantasy'); // <-- State for selected category
 
-    if (error) {
-        return (
-            <div className="featured-section">
-                <h2 className="section-title">Featured Books</h2>
-                <p className="error-message">Failed to load featured books: {error}</p>
-            </div>
-        );
-    }
+    // Define some popular categories for the filter
+    const categories = ['Fantasy', 'Science Fiction', 'Mystery', 'Thriller', 'Romance', 'History', 'Biography'];
 
-    if (!books || books.length === 0) {
-        return (
-            <div className="featured-section">
-                <h2 className="section-title">Featured Books</h2>
-                <p className="no-results">No featured books available at the moment.</p>
-            </div>
-        );
-    }
+    const fetchFeaturedBooks = async (category) => { // <-- Function now takes a category
+        setLoading(true);
+        setError(null);
+        setFeaturedBooks([]);
+
+        // <-- API call uses the selected category
+        const url = `https://openlibrary.org/search.json?subject=${encodeURIComponent(category.toLowerCase())}&limit=8`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setFeaturedBooks(data.docs.filter(book => book.title && (book.key || book.olid || book.id)).map(book => ({
+                ...book,
+                key: book.key || book.olid || book.id
+            })));
+        } catch (err) {
+            setError(`Failed to fetch featured books: ${err.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // <-- useEffect to re-fetch when selectedCategory changes
+    useEffect(() => {
+        fetchFeaturedBooks(selectedCategory);
+    }, [selectedCategory]); // Dependency array ensures re-fetch on category change
 
     return (
-        <section className="featured-section">
+        <section className="featured-books-section">
             <h2 className="section-title">Featured Books</h2>
-            <div className="featured-book-list">
-                {books.map((book) => (
-                    <BookCard key={book.key || book.isbn?.[0] || book.title + (book.author_name?.[0] || '') + (book.first_publish_year || '') || Math.random()} book={book} />
+
+            {/* <-- Category Filter Buttons */}
+            <div  className="category-filters" id="categories">
+                {categories.map((category) => (
+                    <button
+                        key={category}
+                        className={`category-btn ${selectedCategory === category.toLowerCase() ? 'active' : ''}`}
+                        onClick={() => setSelectedCategory(category.toLowerCase())} // <-- Updates selectedCategory
+                    >
+                        {category}
+                    </button>
                 ))}
             </div>
+
+            {loading && <LoadingSpinner />}
+            {error && <p className="error-message">{error}</p>}
+            {!loading && !error && (
+                featuredBooks.length > 0 ? (
+                    <div className="featured-book-list">
+                        {featuredBooks.map((book) => (
+                            <BookCard key={book.key} book={book} />
+                        ))}
+                    </div>
+                ) : (
+                    <p className="no-results">No featured books found for this category.</p>
+                )
+            )}
         </section>
     );
 }
