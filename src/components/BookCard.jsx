@@ -4,10 +4,10 @@ import React from 'react';
 // Helper function to construct external URLs (these remain unchanged)
 const getGoogleBooksUrl = (isbn, title, author) => {
     if (isbn) {
-        return `https://books.google.com/books?vid=ISBN${isbn}&printsec=frontcover#v=onepage&q&f=false`;
+        return `https://www.google.com/search?tbm=bks&q=isbn:${isbn}`;
     }
     const query = encodeURIComponent(`${title} ${author ? author.join(' ') : ''}`);
-    return `https://www.google.com/books/edition/${query}/`;
+    return `https://www.google.com/search?tbm=bks&q=${query}`;
 };
 
 const getAmazonSearchUrl = (isbn, title, author) => {
