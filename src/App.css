@@ -531,18 +531,20 @@ p { font-size: 1em; margin-bottom: 0.9em; color: var(--text-medium); }
     h1 { font-size: 1.7em; }
     h2 { font-size: 1.5em; }
     h3 { font-size: 1.4em; }
-    p { font-size: 0.95em; }
-    .App-header { padding: 25px 15px; margin-bottom: 20px; }
-    .search-bar { padding: 15px; }
+    p { font-size: 0.90em; }
+    .App-header { padding: 25px 15px; margin-bottom: 20px; margin-left:50px; margin-right:15px; }
+    .search-bar { padding: 15px; margin-left:50px; margin-right:15px;  }
     .search-bar-select, .search-bar-input, .search-bar-button {
         padding: 12px 15px;
         font-size: 0.9em;
     }
-    .book-card-cover { height: 200px; padding: 10px; }
+    .book-card-cover { height: 200px;  padding: 10px; }
     .book-card-details { padding: 15px; }
-    .section-title { font-size: 1.7em; margin-bottom: 25px; padding-bottom: 12px; }
+    .section-title { font-size: 1.7em; margin-bottom: 25px; padding-bottom: 12px; margin-left:50px; margin-right:15px;}
     .section-title::after { width: 70px; height: 4px; }
-    .featured-book-list { padding: 0 10px; }
+    .featured-book-list { padding: 0 10px; margin-left:50px; margin-right:15px; }
+    .book-list {margin-left:50px; margin-right:15px; }
+    
 }
 /* src/App.css - CRITICAL FIX FOR CLICKABILITY */
 

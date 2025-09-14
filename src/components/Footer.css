@@ -68,6 +68,10 @@
 @media (max-width: 600px) {
   .footer-content h3 {
     font-size: 1.4rem;
+    
+  }
+  .footer{
+    margin-left:50px; margin-right:15px;
   }
 
   .footer-links {
